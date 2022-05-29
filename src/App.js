@@ -17,6 +17,7 @@ function App() {
   const [turns, setTurns] = useState(0)
   const [choiceOne, setChoiceOne] = useState(null)
   const [choiceTwo, setChoiceTwo] = useState(null)
+  const [disabled, setDisabled] = useState(false)
 
 //new game-> 
 //1. double the cards
@@ -37,10 +38,10 @@ const handleChoice = (card) => {
   choiceOne ? setChoiceTwo(card) : setChoiceOne(card)
 }
 //compare 2 selected cards 
-// Choices if match/not match log to console
-//added "matched" attribute to card
+//added "matched" attribute to cards
 useEffect (() => {
   if (choiceOne && choiceTwo){
+    setDisabled(true)
    
     if (choiceOne.src === choiceTwo.src){
       setCards(prevCards => {
@@ -52,18 +53,19 @@ useEffect (() => {
       })
       
       resetTurn()}
-      else {console.log("no match")
-      resetTurn()}
+      else {
+      setTimeout(() => resetTurn(), 1000)}
     }
   } , [choiceOne, choiceTwo])
 
   console.log(cards)
-  
+
 // reset choices & increase turn
 const resetTurn = () => {
   setChoiceOne(null)
   setChoiceTwo(null)
   setTurns(prevTurns => prevTurns + 1)
+  setDisabled(false)
 }
 
   return (
@@ -75,8 +77,10 @@ const resetTurn = () => {
         {cards.map(card => (
         <SingleCard 
           key={card.id} 
-          handleChoice={handleChoice}
           card={card} 
+          handleChoice={handleChoice}
+          flipped= {card === choiceOne || card === choiceTwo || card.matched}
+          disabled={disabled}
         />
         ))}
       </div>
