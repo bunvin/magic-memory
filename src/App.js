@@ -19,6 +19,7 @@ function App() {
 // 2. shuffle the cards (.sort)
 // 3. random id for cards (.map)
 // 4. reset turns state to 0
+
   const shuffleCards = () => {
     const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random()  - 0.5) //w.o -0.5 won't work. neg wont shuffle pos will suffel
@@ -34,6 +35,17 @@ function App() {
     <div className="App">
       <h1>Magic Match</h1>
       <button onClick={shuffleCards}>New Game</button>
+      
+      <div className='card-grid'>
+        {cards.map(card => (
+          <div className='card' key={card.id}>
+            <div>
+              <img className='front' src={card.src} alt= "card front" />
+              <img className='back' src='/img/cover.png' alt= "card back" />
+            </div>
+          </div>
+          ))}
+      </div>
     </div>
   );
 }
