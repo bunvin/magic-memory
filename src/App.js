@@ -28,7 +28,7 @@ function App() {
     const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random()  - 0.5) //w.o -0.5 won't work. neg wont shuffle pos will suffel
       .map(card => ({ ...card, id: Math.random() }))
-    
+    //restart choices befor new game
     setChoiceOne(null)
     setChoiceTwo(null)
     setCards(shuffledCards)
@@ -41,25 +41,24 @@ const handleChoice = (card) => {
 }
 //compare 2 selected cards 
 useEffect (() => {
-  if (choiceOne && choiceTwo){
+  if (choiceOne && choiceTwo){ //avoid null values
     setDisabled(true)
    
-    if (choiceOne.src === choiceTwo.src){
-      setCards(prevCards => {
+    if (choiceOne.src === choiceTwo.src){ //compare src between 2 images
+      setCards(prevCards => { //pick the now finished accuring cards obj
         return prevCards.map(card => {   
-          if (card.src === choiceOne.src){
-            return {...card, matched: true}
-          } else {return card}
+          if (card.src === choiceOne.src){ //if matched
+            return {...card, matched: true} //update matched to true 
+          } else {return card} //keep obj
         })
       })
-      
       resetTurn()}
+      
+      //delay preventing having a 3rd choice
       else {
-      setTimeout(() => resetTurn(), 1000)}
-    }
+        setTimeout(() => resetTurn(), 1000)}
+      } 
   } , [choiceOne, choiceTwo])
-
-  console.log(cards)
 
 // reset choices & increase turn
 const resetTurn = () => {
@@ -83,7 +82,7 @@ useEffect(()=>{shuffleCards()},[])
           key={card.id} 
           card={card} 
           handleChoice={handleChoice}
-          flipped= {card === choiceOne || card === choiceTwo || card.matched}
+          flipped= {card === choiceOne || card === choiceTwo || card.matched} //||- or
           disabled={disabled}
         />
         ))}
