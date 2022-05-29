@@ -28,7 +28,9 @@ function App() {
     const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random()  - 0.5) //w.o -0.5 won't work. neg wont shuffle pos will suffel
       .map(card => ({ ...card, id: Math.random() }))
-      
+    
+    setChoiceOne(null)
+    setChoiceTwo(null)
     setCards(shuffledCards)
     setTurns(0)
   }
@@ -38,7 +40,6 @@ const handleChoice = (card) => {
   choiceOne ? setChoiceTwo(card) : setChoiceOne(card)
 }
 //compare 2 selected cards 
-//added "matched" attribute to cards
 useEffect (() => {
   if (choiceOne && choiceTwo){
     setDisabled(true)
@@ -68,6 +69,9 @@ const resetTurn = () => {
   setDisabled(false)
 }
 
+//new game automatically
+useEffect(()=>{shuffleCards()},[])
+
   return (
     <div className="App">
       <h1>Magic Match</h1>
@@ -84,6 +88,7 @@ const resetTurn = () => {
         />
         ))}
       </div>
+      <p>Turns: {turns}</p>
     </div>
   );
 }
